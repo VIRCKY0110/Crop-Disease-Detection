@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crop Disease Detection</title>
+    <style>
+        body {
+            background-color: black;
+            color: white;
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .container {
+            text-align: center;
+        }
+
+        button {
+            background-color: #4CAF50; /* Green */
+            border: none;
+            color: white;
+            padding: 15px 32px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin: 10px 2px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #45a049; /* Darker green */
+        }
+
+        #capturedImage {
+            max-width: 100%;
+            height: auto;
+        }
+
+        input[type="text"] {
+            margin-top: 20px;
+            padding: 10px;
+            width: 80%;
+            font-size: 16px;
+        }
+
+        .small-button {
+            padding: 5px 10px; /* Smaller padding for submit button */
+            font-size: 14px; /* Smaller font size */
+        }
+
+        .footer {
+            position: absolute;
+            bottom: 20px;
+            text-align: center;
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Crop Disease Detection</h1>
+        <input type="file" id="imageUpload" accept="image/*" style="display:none;" />
+        <button id="uploadButton">Upload Image</button>
+        
+        <button id="captureButton">Capture image</button>
+        <button id="shutterButton" style="display:none;">Take Picture</button>
+        
+        <video id="video" width="300" height="200" style="display:none;"></video>
+        <canvas id="canvas" width="300" height="200" style="display:none;"></canvas>
+        
+        <div id="preview">
+            <h3>Preview:</h3>
+            <img id="capturedImage" alt="Captured Image" style="display:none;"/>
+        </div>
+
+        <!-- Text box for additional input -->
+        <input type="text" id="additionalInfo" placeholder="Enter crop type or notes..." />
+        
+        <!-- Submit button for additional input -->
+        <button id="submitInput" class="small-button">Submit</button>
+    </div>
+
+    <div class="footer">
+        <button onclick="window.location.href='hktnm4.html';">Back to Home</button>
+    </div>
+
+    <script>
+        document.getElementById('uploadButton').addEventListener('click', function() {
+            document.getElementById('imageUpload').click();
+        });
+
+        document.getElementById('imageUpload').addEventListener('change', function(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const formData = new FormData();
+                formData.append('file', file);
+
+                // Send image to backend for prediction
+                fetch('/predict', {
+                    method: 'POST',
+                    body: formData,
+                })
+                .then(response => response.json())
+                .then(data => {
+                    console.log(data); // Handle the predictions here
+                    alert("Predictions: " + JSON.stringify(data.predictions));
+                })
+                .catch(error => console.error('Error:', error));
+                
+                // Preview uploaded image
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    document.getElementById('capturedImage').src = e.target.result;
+                    document.getElementById('capturedImage').style.display = 'block';
+                }
+                reader.readAsDataURL(file);
+            }
+        });
+
+        document.getElementById('captureButton').addEventListener('click', function() {
+            const video = document.getElementById('video');
+            
+            // Access the device camera
+            navigator.mediaDevices.getUserMedia({ video: true })
+                .then(function(stream) {
+                    video.srcObject = stream;
+                    video.play();
+                    video.style.display = 'block';
+                    document.getElementById('shutterButton').style.display = 'inline-block'; // Show shutter button
+                })
+                .catch(function(err) {
+                    console.error("Error accessing camera: " + err);
+                });
+        });
+
+        document.getElementById('shutterButton').addEventListener('click', function() {
+            const video = document.getElementById('video');
+            const canvas = document.getElementById('canvas');
+            const context = canvas.getContext('2d');
+
+            // Capture the image from the video stream
+            context.drawImage(video, 0, 0, canvas.width, canvas.height);
+            const capturedImageSrc = canvas.toDataURL('image/png');
+
+            // Display the captured image
+            document.getElementById('capturedImage').src = capturedImageSrc;
+            document.getElementById('capturedImage').style.display = 'block';
+
+            // Stop the video stream
+            const stream = video.srcObject;
+            stream.getTracks().forEach(track => track.stop());
+            
+            // Hide video and shutter button
+            video.style.display = 'none';
+            document.getElementById('shutterButton').style.display = 'none';
+            
+            // Optionally send captured image and additional info to backend
+            const additionalInfo = document.getElementById('additionalInfo').value;
+
+            const formData = new FormData();
+            formData.append('file', dataURLtoFile(capturedImageSrc, 'captured-image.png'));
+            formData.append('additionalInfo', additionalInfo);
+
+            fetch('/predict', {
+                method: 'POST',
+                body: formData,
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log(data); // Handle the predictions here
+                alert("Predictions from captured image: " + JSON.stringify(data.predictions));
+                // Clear input after submission
+                document.getElementById('additionalInfo').value = '';
+            })
+            .catch(error => console.error('Error:', error));
+        });
+
+        // Helper function to convert data URL to File object
+        function dataURLtoFile(dataUrl, filename) {
+          const arr = dataUrl.split(','),
+              mime = arr[0].match(/:(.*?);/)[1],
+              bstr = atob(arr[1]),
+              n = bstr.length,
+              u8arr = new Uint8Array(n);
+          
+          while (n--) {
+              u8arr[n] = bstr.charCodeAt(n);
+          }
+          
+          return new File([u8arr], filename, { type: mime });
+      }
+
+      // Handle additional info submission
+      document.getElementById('submitInput').addEventListener('click', function() {
+          const additionalInfo = document.getElementById('additionalInfo').value;
+
+          if (additionalInfo.trim() === '') {
+              alert("Please enter some information before submitting.");
+              return; // Prevent submission if input is empty
+          }
+
+          // Here you can handle what to do with the additional info (e.g., send it to backend)
+          alert("Submitted Info: " + additionalInfo);
+          // Clear input after submission
+          document.getElementById('additionalInfo').value = '';
+      });
+    </script>
+</body>
+</html>
