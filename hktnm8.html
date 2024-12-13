@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CROP DISEASE DETECTION</title>
+    <style>
+        body {
+            background-color: black;
+            color: white;
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+        }
+
+        .header {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .menu-icon {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .bar {
+            width: 35px;
+            height: 5px;
+            background-color: #4CAF50;
+            margin: 3px 0;
+            transition: all 0.3s ease;
+        }
+
+        .sliding-menu {
+            position: fixed;
+            top: 0;
+            left: -250px;
+            width: 250px;
+            height: 100%;
+            background-color: #333;
+            box-shadow: 2px 0 5px rgba(0, 0, 0, 0.5);
+            transition: left 0.3s ease;
+        }
+
+        .sliding-menu.open {
+            left: 0;
+        }
+
+        .sliding-menu a {
+            color: white;
+            padding: 15px;
+            text-decoration: none;
+            display: block;
+        }
+
+        .sliding-menu a:hover {
+            background-color: #575757;
+        }
+
+        .content {
+            padding: 20px;
+            text-align: left;
+        }
+
+        h2 {
+            color: #4CAF50;
+        }
+
+        h3 {
+            margin-top: 20px;
+        }
+
+        .language-buttons {
+            margin-top: 20px;
+            display: flex;
+            gap: 10px;
+        }
+
+        .language-button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s ease;
+        }
+
+        .language-button:hover {
+            background-color: #45a049;
+        }
+
+        #google_translate_element select {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            padding: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        #google_translate_element select:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Title -->
+    <div class="header">
+        <h1 style="color: #4CAF50">CROP DISEASE DETECTION</h1>
+    </div>
+
+    <!-- Menu Icon with Three Green Lines -->
+    <div class="menu-icon" id="menuIcon" onclick="toggleMenu()">
+        <div class="bar"></div>
+        <div class="bar"></div>
+        <div class="bar"></div>
+    </div>
+
+    <!-- Sliding Menu -->
+    <div class="sliding-menu" id="slidingMenu">
+        <a href="leaf-blight.html">Leaf Blight</a>
+        <a href="rust-disease.html">Rust Disease</a>
+        <a href="powdery-mildew.html">Powdery Mildew</a>
+        <a href="fungal-infection.html">Fungal Infection</a>
+        <a href="new.html">Crop Analysis</a>
+	<a href="chatbot.html">AGRI AI</a>
+    </div>
+
+    <!-- Content Section -->
+    <div class="content">
+        <h2>Understanding Crop Diseases</h2>
+
+        <p>Crop diseases can significantly impact agricultural productivity and food security. They are caused by various pathogens including fungi, bacteria, viruses, and nematodes. Understanding these diseases is crucial for effective management and prevention. Here are some common crop diseases along with their symptoms and prevention methods:</p>
+
+        <h3>1. Leaf Blight</h3>
+        <p><strong>Symptoms:</strong> Yellowing of leaves, wilting, and dark spots are common indicators of leaf blight. In severe cases, entire leaves may die off, leading to reduced photosynthesis and stunted plant growth.</p>
+        <p><strong>Prevention:</strong> To prevent leaf blight, rotate crops annually to disrupt the life cycle of pathogens. Maintain proper spacing between plants to ensure adequate air circulation and reduce humidity around the foliage. Additionally, using resistant varieties can significantly minimize the risk of infection.</p>
+
+        <h3>2. Rust Disease</h3>
+        <p><strong>Symptoms:</strong> Rust disease is characterized by reddish-brown pustules on leaves and stems. These pustules can burst open, releasing spores that spread the disease further.</p>
+        <p><strong>Prevention:</strong> Planting resistant varieties is one of the most effective ways to combat rust disease. Regularly applying fungicides during critical growth stages can also help protect crops from infection.</p>
+
+        <h3>3. Powdery Mildew</h3>
+        <p><strong>Symptoms:</strong> Powdery mildew appears as white powdery spots on leaves and stems, which can lead to yellowing and eventual leaf drop if not controlled.</p>
+        <p><strong>Prevention:</strong> Ensuring adequate sunlight and air circulation around plants is key to preventing powdery mildew. If necessary, fungicides can be applied to manage outbreaks effectively.</p>
+
+        <h3>4. Fungal Infections</h3>
+        <p><strong>Symptoms:</strong> Fungal infections may present as general wilting, discoloration of leaves, stunted growth, or even root rot in severe cases.</p>
+        <p><strong>Prevention:</strong> Good sanitation practices are essential in managing fungal infections. This includes removing infected plants promptly and applying fungicides as a preventive measure when conditions are favorable for disease development.</p>
+
+        <h2>Plant Disease Management</h2>
+        <p>Disease management is essential in agriculture to minimize crop losses caused by various pathogens such as fungi, bacteria, viruses, and nematodes. Effective disease management strategies include:</p>
+        <ul>
+            <li><strong>Use of Resistant Varieties:</strong> Selecting plant varieties that are resistant to specific diseases can greatly reduce the incidence of crop loss.</li>
+            <li><strong>Cultural Practices:</strong> Implementing practices such as crop rotation, proper irrigation techniques, and maintaining soil health can help prevent disease outbreaks.</li>
+            <li><strong>Pest Management:</strong> Integrated pest management (IPM) strategies that combine biological control with chemical treatments can effectively manage both pests and diseases.</li>
+            <li><strong>Treatment Timing:</strong> Timely application of fungicides or other treatments based on disease forecasting can optimize effectiveness and reduce environmental impact.</li>
+        </ul>
+
+        <h2>Plant Disease Forecasting</h2>
+        <p>Plant disease forecasting systems predict the occurrence or severity of plant diseases by assessing factors such as pathogen presence, host susceptibility, and environmental conditions. These systems help growers make informed decisions regarding disease treatments to optimize yield and reduce economic losses.</p>
+
+        <p>The use of technology in forecasting has advanced significantly in recent years. Tools such as satellite imagery and predictive modeling allow farmers to anticipate outbreaks before they occur, enabling proactive management strategies.</p>
+
+        <h2>Epidemiology of Plant Diseases</h2>
+        <p>The study of plant disease epidemiology involves understanding how diseases spread within plant populations. Factors such as environmental conditions (temperature, humidity), pathogen life cycles (spore production), and host responses (plant immunity) are crucial in determining disease outbreaks.</p>
+
+        <p>This knowledge allows researchers and farmers to develop effective management strategies tailored to specific crops and local conditions. By analyzing these factors, effective management strategies can be developed to mitigate crop losses.</p>
+
+        <!-- Google Translate -->
+        <div id="google_translate_element"></div>
+    </div>
+
+    <script src="script.js"></script>
+    <script type="text/javascript">
+        function googleTranslateElementInit() {
+            new google.translate.TranslateElement(
+                {pageLanguage: 'en'},
+                'google_translate_element'
+            );
+        } 
+    </script>
+    <script type="text/javascript" src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+
+    <script>
+        function toggleMenu() {
+            const slidingMenu = document.getElementById('slidingMenu');
+            const menuIcon = document.getElementById('menuIcon');
+
+            // Toggle the open class to slide in/out
+            slidingMenu.classList.toggle('open');
+        }
+
+       // Close the sliding menu if user clicks outside of it
+       window.onclick = function(event) {
+           const slidingMenu = document.getElementById('slidingMenu');
+           
+           if (!event.target.matches('.menu-icon') && slidingMenu.classList.contains('open')) {
+               slidingMenu.classList.remove('open');
+           }
+       }
+    </script>
+
+</body>
+</html>
