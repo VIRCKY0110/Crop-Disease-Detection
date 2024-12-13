@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Crop Disease Detection</title>
+  <style>
+    body {
+      background-color: black;
+      color: white;
+      font-family: Arial, sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+      flex-direction: column; /* Allow stacking of elements vertically */
+    }
+
+    .container {
+      text-align: center;
+    }
+
+    button {
+      background-color: #4CAF50; /* Green */
+      border: none;
+      color: white;
+      padding: 15px 32px;
+      text-align: center;
+      text-decoration: none;
+      display: inline-block;
+      font-size: 16px;
+      margin: 10px 2px;
+      cursor: pointer;
+      border-radius: 10px; /* Added rounded corners for all buttons */
+    }
+
+    button:hover {
+      background-color: #45a049; /* Darker green */
+    }
+
+    #capturedImage {
+      max-width: 100%;
+      height: auto;
+    }
+
+    input[type="text"] {
+      margin-top: 20px;
+      padding: 10px;
+      width: 80%;
+      font-size: 16px;
+    }
+
+    .small-button {
+      padding: 5px 10px; /* Smaller padding for submit button */
+      font-サイズ: 14px; /* Font size in Japanese (サイズ) */
+      border-radius: 10px; /* Rounded corners for submit button */
+    }
+
+    .back-button {
+      padding: 10px 20px; /* Adjust padding for back button */
+      font-size: 16px; /* Font size */
+      border-radius: 25px; /* Rounded corners for back button */
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Crop Disease Detection</h1>
+    <input type="file" id="imageUpload" accept="image/*" style="display:none;" />
+    <button id="uploadButton">Upload Image</button>
+     
+    <button id="captureButton">Capture Image</button>
+    <button id="shutterButton" style="display:none;">Take Picture</button>
+     
+    <video id="video" width="300" height="200" style="display:none;"></video>
+    <canvas id="canvas" width="300" height="200" style="display:none;"></canvas>
+     
+    <div id="preview">
+      <h3>Preview:</h3>
+      <img id="capturedImage" alt="Captured Image" style="display:none;"/>
+    </div>
+
+    <input type="text" id="additionalInfo" placeholder="Enter crop type or notes..." />
+     
+    <button id="submitInput" class="small-button">Submit</button>
+
+    <button class="back-button" onclick="window.location.href='hktnm4.html'">Back to Home</button> </div>
+
+  <script>
+ document.getElementById('uploadButton').addEventListener('click', function() {
+    document.getElementById('imageUpload').click();
+});
+
+document.getElementById('imageUpload').addEventListener('change', function(event) {
+    const file = event.target.files[0];
+    if (file) {
+        const img = document.createElement('img');
+        img.src = URL.createObjectURL(file);
+        img.onload = function() {
+            // Display the uploaded image in the preview
+            document.getElementById('capturedImage').src = img.src;
+            document.getElementById('capturedImage').style.display = 'block';
+            URL.revokeObjectURL(img.src); // Free memory
+        };
+    }
+});
+
+document.getElementById('captureButton').addEventListener('click', function() {
+    const video = document.getElementById('video');
+    
+    // Access the device camera
+    navigator.mediaDevices.getUserMedia({ video: true })
+        .then(function(stream) {
+            video.srcObject = stream;
+            video.play();
+            video.style.display = 'block';
+
+            // Capture the image after a short delay
+            setTimeout(() => {
+                const canvas = document.getElementById('canvas');
+                const context = canvas.getContext('2d');
+                context.drawImage(video, 0, 0, canvas.width, canvas.height);
+                const capturedImageSrc = canvas.toDataURL('image/png');
+                
+                // Display the captured image
+                document.getElementById('capturedImage').src = capturedImageSrc;
+                document.getElementById('capturedImage').style.display = 'block';
+
+                // Stop the video stream
+                stream.getTracks().forEach(track => track.stop());
+                video.style.display = 'none';
+            }, 1000); // Capture after 1 second
+        })
+        .catch(function(err) {
+            console.error("Error accessing camera: " + err);
+        });
+});
+
+  </script>
+</body>
+</html>
